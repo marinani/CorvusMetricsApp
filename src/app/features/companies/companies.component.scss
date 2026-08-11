@@ -1,0 +1,41 @@
+.corvus-panel {
+  background-color: var(--corvus-surface);
+  border: 1px solid var(--corvus-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 0;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.corvus-table {
+  width: 100%;
+  min-width: 640px;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &--active {
+    color: var(--corvus-metric-up);
+    background-color: rgba(52, 211, 153, 0.12);
+  }
+
+  &--inactive {
+    color: var(--corvus-text-muted);
+    background-color: rgba(148, 163, 184, 0.12);
+  }
+}

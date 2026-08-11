@@ -1,0 +1,78 @@
+<div class="login-page">
+  <form class="login-card" (submit)="onSubmit(); $event.preventDefault()" novalidate>
+    <img class="login-logo" src="/logo-fundo-dark.svg" alt="Corvus Metrics logo" />
+
+    <h1 class="login-title">Welcome back</h1>
+    <p class="login-subtitle">Sign in to access your metrics dashboard</p>
+
+    <mat-form-field appearance="outline" class="login-field">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        autocomplete="email"
+        placeholder="you@company.com"
+        [formField]="loginForm.email"
+      />
+      @if (loginForm.email().touched() && loginForm.email().errors().length) {
+        <mat-error>{{ loginForm.email().errors()[0].message }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="login-field">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        [type]="hidePassword() ? 'password' : 'text'"
+        autocomplete="current-password"
+        placeholder="Enter your password"
+        [formField]="loginForm.password"
+      />
+      <button
+        type="button"
+        mat-icon-button
+        matSuffix
+        [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
+        (click)="togglePasswordVisibility()"
+      >
+        <mat-icon fontSet="material-icons-outlined">
+          {{ hidePassword() ? 'visibility' : 'visibility_off' }}
+        </mat-icon>
+      </button>
+      @if (loginForm.password().touched() && loginForm.password().errors().length) {
+        <mat-error>{{ loginForm.password().errors()[0].message }}</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="login-options">
+      <mat-checkbox
+        color="primary"
+        [checked]="rememberMe()"
+        (change)="rememberMe.set($event.checked)"
+      >
+        Remember me
+      </mat-checkbox>
+      <a class="login-link" href="#">Forgot password?</a>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="login-error" role="alert">{{ errorMessage() }}</div>
+    }
+
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      class="login-button"
+      [disabled]="loginForm().invalid() || isSubmitting()"
+    >
+      @if (isSubmitting()) {
+        <mat-spinner diameter="20" />
+      } @else {
+        Sign In
+      }
+    </button>
+
+    <p class="login-demo-hint">Demo mode active — use any email and password.</p>
+  </form>
+</div>

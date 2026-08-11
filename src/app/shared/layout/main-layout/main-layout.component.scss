@@ -1,0 +1,143 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.app-layout {
+  height: 100vh;
+  background: transparent;
+}
+
+
+.app-sidenav {
+  width: 260px;
+  background-color: var(--corvus-surface);
+  border-right: 1px solid var(--corvus-border);
+
+  &.mat-drawer {
+    color: var(--corvus-text-primary);
+  }
+}
+
+.sidenav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--corvus-border);
+}
+
+.brand-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px var(--corvus-primary-glow));
+}
+
+.brand-name,
+.toolbar-title {
+  color: var(--corvus-text-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.brand-accent {
+  color: var(--corvus-primary);
+}
+
+.sidenav-nav {
+  padding: 12px 8px;
+
+  .nav-item {
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: background-color 0.2s ease;
+
+    .mat-icon {
+      color: var(--corvus-text-muted);
+    }
+
+    .mat-list-item-title {
+      color: var(--corvus-text-muted);
+    }
+
+    &:hover {
+      background-color: rgba(0, 229, 255, 0.06);
+
+      .mat-icon,
+      .mat-list-item-title {
+        color: var(--corvus-text-primary);
+      }
+    }
+
+    &--active {
+      background-color: rgba(0, 229, 255, 0.12);
+
+      .mat-icon {
+        color: var(--corvus-primary);
+        filter: drop-shadow(0 0 6px var(--corvus-primary-glow));
+      }
+
+      .mat-list-item-title {
+        color: var(--corvus-primary);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.app-content {
+  background: transparent;
+}
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: rgba(13, 17, 21, 0.75) !important;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--corvus-border);
+  color: var(--corvus-text-primary);
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.toolbar-toggle {
+  color: var(--corvus-text-muted);
+}
+
+.toolbar-title {
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.toolbar-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-user-name {
+  color: var(--corvus-text-muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
+}
+
+.page-content {
+  padding: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
+}

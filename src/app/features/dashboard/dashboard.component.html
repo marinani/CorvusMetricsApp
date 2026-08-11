@@ -1,0 +1,39 @@
+<app-page-header
+  title="Dashboard"
+  subtitle="Business metrics overview for your companies"
+/>
+
+<section class="kpi-grid">
+  @for (kpi of kpis(); track kpi.id) {
+    <app-metric-card
+      [label]="kpi.label"
+      [value]="kpi.value"
+      [unit]="kpi.unit"
+      [change]="kpi.change"
+      [trend]="kpi.trend"
+      [icon]="kpi.icon"
+    />
+  }
+</section>
+
+<section class="panel-grid">
+  <mat-card class="corvus-panel">
+    <header class="panel-header">
+      <h2 class="panel-title">Sales Overview</h2>
+      <span class="panel-badge">Last 12 months</span>
+    </header>
+    <div class="chart-container">
+      <app-trend-chart [data]="salesHistory()" color="#00e5ff" />
+    </div>
+  </mat-card>
+
+  <mat-card class="corvus-panel">
+    <header class="panel-header">
+      <h2 class="panel-title">Quarterly Growth</h2>
+      <span class="panel-badge">Year over year</span>
+    </header>
+    <div class="chart-container">
+      <app-trend-chart [data]="salesHistory()" color="#00e676" />
+    </div>
+  </mat-card>
+</section>

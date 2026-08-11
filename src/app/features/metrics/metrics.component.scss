@@ -1,0 +1,54 @@
+.corvus-panel {
+  background-color: var(--corvus-surface);
+  border: 1px solid var(--corvus-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 0;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.corvus-table {
+  width: 100%;
+  min-width: 640px;
+}
+
+.period-cell {
+  color: var(--corvus-text-muted);
+}
+
+.value-cell {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+
+  &.muted {
+    color: var(--corvus-text-muted);
+    font-weight: 400;
+  }
+}
+
+.trend-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+
+  &--up {
+    color: var(--corvus-metric-up);
+  }
+
+  &--warn {
+    color: var(--corvus-metric-warn);
+  }
+
+  &--down {
+    color: var(--corvus-metric-down);
+  }
+}

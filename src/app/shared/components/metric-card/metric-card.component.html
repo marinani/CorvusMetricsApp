@@ -1,0 +1,26 @@
+<mat-card class="corvus-metric-card">
+  <header class="metric-header">
+    <span class="metric-label">{{ label() }}</span>
+    <mat-icon class="metric-icon" fontSet="material-icons-outlined">{{ icon() }}</mat-icon>
+  </header>
+
+  <div class="metric-value">
+    {{ formattedValue() }}
+    @if (unit()) {
+      <span class="metric-unit">{{ unit() }}</span>
+    }
+  </div>
+
+  <footer class="metric-footer">
+    <span
+      class="metric-change"
+      [class.metric-change--up]="trend() === 'up'"
+      [class.metric-change--warn]="trend() === 'warn'"
+      [class.metric-change--down]="trend() === 'down'"
+    >
+      <mat-icon fontSet="material-icons-outlined">{{ trendIcon() }}</mat-icon>
+      {{ formattedChange() }}
+    </span>
+    <span class="metric-subtitle">vs previous period</span>
+  </footer>
+</mat-card>

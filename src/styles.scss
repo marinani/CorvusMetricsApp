@@ -1,0 +1,87 @@
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  color-scheme: dark;
+  @include mat.theme((
+    color: (
+      primary: mat.$cyan-palette,
+      secondary: mat.$green-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+:root {
+  --corvus-bg-main: #0d1115;
+  --corvus-surface: #1a2027;
+  --corvus-border: #2d3748;
+
+  --corvus-primary: #00e5ff;
+  --corvus-primary-glow: rgba(0, 229, 255, 0.2);
+  --corvus-secondary: #00e676;
+
+  --corvus-text-primary: #f8fafc;
+  --corvus-text-muted: #94a3b8;
+
+  --corvus-metric-up: #34d399;
+  --corvus-metric-warn: #fbbf24;
+  --corvus-metric-down: #f87171;
+
+  --mat-sys-primary: #00e5ff;
+  --mat-sys-on-primary: #00363c;
+  --mat-sys-primary-container: #00494f;
+  --mat-sys-on-primary-container: #aef3ff;
+  --mat-sys-secondary: #00e676;
+  --mat-sys-on-secondary: #003318;
+  --mat-sys-secondary-container: #0f4d2c;
+  --mat-sys-on-secondary-container: #b9f5c9;
+  --mat-sys-error: #f87171;
+  --mat-sys-on-error: #520000;
+  --mat-sys-error-container: #731515;
+  --mat-sys-on-error-container: #ffdcda;
+
+  --mat-sys-surface: #0d1115;
+  --mat-sys-surface-dim: #0d1115;
+  --mat-sys-surface-bright: #2a323b;
+  --mat-sys-surface-container-lowest: #080b0e;
+  --mat-sys-surface-container-low: #151b21;
+  --mat-sys-surface-container: #1a2027;
+  --mat-sys-surface-container-high: #212a32;
+  --mat-sys-surface-container-highest: #2a343d;
+  --mat-sys-on-surface: #f8fafc;
+  --mat-sys-on-surface-variant: #94a3b8;
+  --mat-sys-outline: #2d3748;
+  --mat-sys-outline-variant: #2d3748;
+  --mat-sys-inverse-surface: #eef1f4;
+  --mat-sys-inverse-on-surface: #1c232b;
+}
+
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.603)), url('/background2.png') no-repeat center center fixed;
+  background-size: cover;
+  color: var(--corvus-text-primary);
+  font-family: 'Inter', 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--corvus-border) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--corvus-border);
+  border-radius: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
