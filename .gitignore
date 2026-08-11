@@ -6,6 +6,13 @@
 /out-tsc
 /bazel-out
 
+# Environment
+.env
+
+# Generated from .env by scripts/set-env.mjs
+/src/environments/environment.ts
+/src/environments/environment.development.ts
+
 # Node
 /node_modules
 npm-debug.log

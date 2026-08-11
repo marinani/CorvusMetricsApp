@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>
+  <mat-icon fontSet="material-icons-outlined" class="title-icon">delete</mat-icon>
+  Delete user
+</h2>
+
+<mat-dialog-content>
+  <p>
+    Are you sure you want to delete
+    <strong>{{ user.firstName }} {{ user.lastName }}</strong>?
+  </p>
+  <p class="delete-warning">This action cannot be undone.</p>
+
+  @if (errorMessage()) {
+    <div class="form-error" role="alert">{{ errorMessage() }}</div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" [disabled]="isSubmitting()" (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="warn" type="button" [disabled]="isSubmitting()" (click)="confirm()">
+    @if (isSubmitting()) {
+      <mat-spinner diameter="20" />
+    } @else {
+      Delete
+    }
+  </button>
+</mat-dialog-actions>

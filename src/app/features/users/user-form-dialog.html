@@ -1,0 +1,91 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Edit User' : 'New User' }}</h2>
+
+<mat-dialog-content>
+  <form id="user-form" class="user-form" (submit)="onSubmit(); $event.preventDefault()" novalidate>
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>First name</mat-label>
+        <input matInput type="text" autocomplete="off" [formField]="userForm.firstName" />
+        @if (userForm.firstName().touched() && userForm.firstName().errors().length) {
+          <mat-error>{{ userForm.firstName().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last name</mat-label>
+        <input matInput type="text" autocomplete="off" [formField]="userForm.lastName" />
+        @if (userForm.lastName().touched() && userForm.lastName().errors().length) {
+          <mat-error>{{ userForm.lastName().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" autocomplete="off" [formField]="userForm.email" />
+        @if (userForm.email().touched() && userForm.email().errors().length) {
+          <mat-error>{{ userForm.email().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Role</mat-label>
+        <mat-select [formField]="userForm.role">
+          <mat-option value="">Select a role</mat-option>
+          @for (role of roles; track role) {
+            <mat-option [value]="role">{{ role }}</mat-option>
+          }
+        </mat-select>
+        @if (userForm.role().touched() && userForm.role().errors().length) {
+          <mat-error>{{ userForm.role().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+
+      @if (!isEditing) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword() ? 'password' : 'text'"
+            autocomplete="new-password"
+            [formField]="userForm.password"
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
+            (click)="togglePasswordVisibility()"
+          >
+            <mat-icon fontSet="material-icons-outlined">
+              {{ hidePassword() ? 'visibility' : 'visibility_off' }}
+            </mat-icon>
+          </button>
+          @if (userForm.password().touched() && userForm.password().errors().length) {
+            <mat-error>{{ userForm.password().errors()[0].message }}</mat-error>
+          }
+        </mat-form-field>
+      }
+    </div>
+
+    @if (errorMessage()) {
+      <div class="form-error" role="alert">{{ errorMessage() }}</div>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" [disabled]="isSubmitting()" (click)="onCancel()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="submit"
+    form="user-form"
+    [disabled]="userForm().invalid() || isSubmitting()"
+  >
+    @if (isSubmitting()) {
+      <mat-spinner diameter="20" />
+    } @else {
+      {{ isEditing ? 'Save Changes' : 'Create User' }}
+    }
+  </button>
+</mat-dialog-actions>

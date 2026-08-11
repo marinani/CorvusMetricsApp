@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { firstValueFrom } from 'rxjs';
 
+import { resolveApiErrorMessage } from '../../../core/utils/http-error.util';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -66,8 +67,8 @@ export class LoginComponent {
         const session = await firstValueFrom(this.authService.login(this.credentials()));
         this.authService.setSession(session);
         await this.router.navigate(['/dashboard']);
-      } catch {
-        this.errorMessage.set('Unable to sign in. Please check your credentials and try again.');
+      } catch (error) {
+        this.errorMessage.set(resolveApiErrorMessage(error, 'Invalid email or password.'));
       } finally {
         this.isSubmitting.set(false);
       }

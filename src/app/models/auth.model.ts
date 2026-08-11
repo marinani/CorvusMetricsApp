@@ -1,3 +1,5 @@
+import { UserRole } from './user.model';
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -5,13 +7,14 @@ export interface LoginRequest {
 
 export interface AuthUser {
   id: string;
-  name: string;
   email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole | '';
 }
 
-export interface AuthResponse {
-  accessToken: string;
-  tokenType: string;
-  expiresIn: number;
+export interface AuthSession {
+  token: string;
   user: AuthUser;
+  expiresAt: number | null;
 }

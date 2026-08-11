@@ -1,34 +1,34 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '../core/services/api/api.service';
 import { Metric, MetricHistory, MetricPeriod } from '../models/metric.model';
 
 @Injectable({ providedIn: 'root' })
-export class MetricService extends ApiService {
-  protected readonly resourcePath = 'metrics';
+export class MetricService {
+  private readonly api = inject(ApiService);
 
   getAll(companyId?: string): Observable<Metric[]> {
-    return this.get<Metric[]>('', companyId ? { companyId } : undefined);
+    return this.api.get<Metric[]>('/metrics', companyId ? { params: { companyId } } : undefined);
   }
 
   getById(id: string): Observable<Metric> {
-    return this.get<Metric>(`/${id}`);
+    return this.api.get<Metric>(`/metrics/${id}`);
   }
 
   getHistory(id: string, period?: MetricPeriod): Observable<MetricHistory> {
-    return this.get<MetricHistory>(`/${id}/history`, period ? { period } : undefined);
+    return this.api.get<MetricHistory>(`/metrics/${id}/history`, period ? { params: { period } } : undefined);
   }
 
   create(metric: Partial<Metric>): Observable<Metric> {
-    return this.post<Metric>('', metric);
+    return this.api.post<Metric>('/metrics', metric);
   }
 
   update(id: string, metric: Partial<Metric>): Observable<Metric> {
-    return this.put<Metric>(`/${id}`, metric);
+    return this.api.put<Metric>(`/metrics/${id}`, metric);
   }
 
   remove(id: string): Observable<void> {
-    return this.delete<void>(`/${id}`);
+    return this.api.delete<void>(`/metrics/${id}`);
   }
 }

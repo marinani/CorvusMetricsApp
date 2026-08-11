@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,10 +19,26 @@ interface NavItem {
   icon: string;
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { path: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
-  { path: 'companies', label: 'Companies', icon: 'business' },
-  { path: 'metrics', label: 'Metrics', icon: 'query_stats' },
+interface NavSection {
+  label: string;
+  items: NavItem[];
+}
+
+const NAV_SECTIONS: NavSection[] = [
+  {
+    label: 'Overview',
+    items: [
+      { path: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
+      { path: 'metrics', label: 'Metrics', icon: 'query_stats' },
+    ],
+  },
+  {
+    label: 'Basic Registration',
+    items: [
+      { path: 'companies', label: 'Companies', icon: 'business' },
+      { path: 'users', label: 'Users', icon: 'group' },
+    ],
+  },
 ];
 
 @Component({
@@ -44,12 +60,23 @@ const NAV_ITEMS: NavItem[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainLayoutComponent {
-  protected readonly navItems = NAV_ITEMS;
+  protected readonly navSections = NAV_SECTIONS;
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
   protected readonly user = this.authService.user;
+
+  protected readonly displayName = computed(() => {
+    const currentUser = this.user();
+
+    if (!currentUser) {
+      return '';
+    }
+
+    const fullName = `${currentUser.firstName} ${currentUser.lastName}`.trim();
+    return fullName || currentUser.email;
+  });
 
   protected readonly isMobile = toSignal(
     inject(BreakpointObserver)

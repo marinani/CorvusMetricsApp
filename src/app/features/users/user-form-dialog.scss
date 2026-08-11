@@ -1,0 +1,19 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+}
+
+.form-error {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--corvus-metric-down);
+  background-color: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  font-size: 0.85rem;
+}

@@ -7,23 +7,27 @@
   >
     <div class="sidenav-brand">
       <img class="brand-img" src="/logo-fundo-dark.svg" alt="Corvus Metrics logo" />
-      <span class="brand-name">
-        CORVUS <span class="brand-accent">METRICS</span>
-      </span>
+    
     </div>
 
     <mat-nav-list class="sidenav-nav">
-      @for (item of navItems; track item.path) {
-        <a
-          mat-list-item
-          class="nav-item"
-          [routerLink]="['/', item.path]"
-          routerLinkActive="nav-item--active"
-          (click)="closeSidenav()"
-        >
-          <mat-icon matListItemIcon fontSet="material-icons-outlined">{{ item.icon }}</mat-icon>
-          <span matListItemTitle>{{ item.label }}</span>
-        </a>
+      @for (section of navSections; track section.label) {
+        <div class="nav-section">
+          <span class="nav-section-label">{{ section.label }}</span>
+
+          @for (item of section.items; track item.path) {
+            <a
+              mat-list-item
+              class="nav-item"
+              [routerLink]="['/', item.path]"
+              routerLinkActive="nav-item--active"
+              (click)="closeSidenav()"
+            >
+              <mat-icon matListItemIcon fontSet="material-icons-outlined">{{ item.icon }}</mat-icon>
+              <span matListItemTitle>{{ item.label }}</span>
+            </a>
+          }
+        </div>
       }
     </mat-nav-list>
   </mat-sidenav>
@@ -46,8 +50,8 @@
       <span class="toolbar-spacer"></span>
 
       <span class="toolbar-user">
-        @if (user()?.name) {
-          <span class="toolbar-user-name">{{ user()!.name }}</span>
+        @if (displayName()) {
+          <span class="toolbar-user-name">{{ displayName() }}</span>
         }
         <button mat-icon-button aria-label="User menu" matTooltip="Sign out" (click)="logout()">
           <mat-icon fontSet="material-icons-outlined">logout</mat-icon>
