@@ -1,0 +1,105 @@
+.corvus-panel {
+  background-color: var(--corvus-surface);
+  border: 1px solid var(--corvus-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+  mat-paginator {
+    border-top: 1px solid var(--corvus-border);
+    background-color: transparent;
+  }
+}
+
+.tenants-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+
+  .filter-name {
+    min-width: 240px;
+  }
+}
+
+.filter-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+.toolbar-actions {
+  padding-top: 6px;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 0;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.corvus-table {
+  width: 100%;
+  min-width: 760px;
+}
+
+.actions-header {
+  text-align: right;
+  width: 120px;
+}
+
+.actions-cell {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &--active {
+    color: var(--corvus-metric-up);
+    background-color: rgba(52, 211, 153, 0.12);
+  }
+
+  &--inactive {
+    color: var(--corvus-text-muted);
+    background-color: rgba(148, 163, 184, 0.12);
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 0;
+  color: var(--corvus-text-muted);
+
+  .mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  p {
+    margin: 0;
+  }
+}

@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Edit Acquisition Channel' : 'New Acquisition Channel' }}</h2>
+
+<mat-dialog-content>
+  <form
+    id="channel-form"
+    class="channel-form"
+    (submit)="onSubmit(); $event.preventDefault()"
+    novalidate
+  >
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          type="text"
+          autocomplete="off"
+          [formField]="channelForm.name"
+          placeholder="e.g. Instagram"
+        />
+        @if (channelForm.name().touched() && channelForm.name().errors().length) {
+          <mat-error>{{ channelForm.name().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="color-field">
+        <span class="color-label">Color</span>
+        <button type="button" class="color-trigger" (click)="pickColor()">
+          <span class="color-swatch" [style.background-color]="model().color"></span>
+          <span class="color-value">{{ model().color.toUpperCase() }}</span>
+          <mat-icon fontSet="material-icons-outlined" class="color-icon">palette</mat-icon>
+        </button>
+        @if (channelForm.color().touched() && channelForm.color().errors().length) {
+          <span class="field-error">{{ channelForm.color().errors()[0].message }}</span>
+        }
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="form-error" role="alert">{{ errorMessage() }}</div>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" [disabled]="isSubmitting()" (click)="onCancel()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="submit"
+    form="channel-form"
+    [disabled]="channelForm().invalid() || isSubmitting()"
+  >
+    @if (isSubmitting()) {
+      <mat-spinner diameter="20" />
+    } @else {
+      {{ isEditing ? 'Save Changes' : 'Create Channel' }}
+    }
+  </button>
+</mat-dialog-actions>

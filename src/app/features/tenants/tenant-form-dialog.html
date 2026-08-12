@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Edit Tenant' : 'New Tenant' }}</h2>
+
+<mat-dialog-content>
+  <form
+    id="tenant-form"
+    class="tenant-form"
+    (submit)="onSubmit(); $event.preventDefault()"
+    novalidate
+  >
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" autocomplete="off" [formField]="tenantForm.name" />
+        @if (tenantForm.name().touched() && tenantForm.name().errors().length) {
+          <mat-error>{{ tenantForm.name().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>CNPJ</mat-label>
+        <input
+          matInput
+          type="text"
+          autocomplete="off"
+          [formField]="tenantForm.cnpj"
+          placeholder="XX.XXX.XXX/XXXX-XX"
+          (input)="applyCnpjMask($event)"
+        />
+        @if (tenantForm.cnpj().touched() && tenantForm.cnpj().errors().length) {
+          <mat-error>{{ tenantForm.cnpj().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" autocomplete="off" [formField]="tenantForm.email" />
+        @if (tenantForm.email().touched() && tenantForm.email().errors().length) {
+          <mat-error>{{ tenantForm.email().errors()[0].message }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="form-error" role="alert">{{ errorMessage() }}</div>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" [disabled]="isSubmitting()" (click)="onCancel()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="submit"
+    form="tenant-form"
+    [disabled]="tenantForm().invalid() || isSubmitting()"
+  >
+    @if (isSubmitting()) {
+      <mat-spinner diameter="20" />
+    } @else {
+      {{ isEditing ? 'Save Changes' : 'Create Tenant' }}
+    }
+  </button>
+</mat-dialog-actions>

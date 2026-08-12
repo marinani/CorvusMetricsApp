@@ -1,6 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { resource } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,23 +16,17 @@ import { catchError, firstValueFrom, of } from 'rxjs';
 
 import { ToastService } from '../../core/services/toast/toast.service';
 import { isUnauthorizedError, resolveApiErrorMessage } from '../../core/utils/http-error.util';
+import { ENTITY_STATUS_FILTERS, EntityStatusFilter } from '../../models/entity-status.model';
 import { PagedResult } from '../../models/pagination.model';
-import {
-  USER_ROLES,
-  USER_STATUS_FILTERS,
-  User,
-  UserListQuery,
-  UserRole,
-  UserStatus,
-  UserStatusFilter,
-} from '../../models/user.model';
-import { UserService } from '../../services/user.service';
+import { Tenant, TenantListQuery } from '../../models/tenant.model';
+import { TenantService } from '../../services/tenant.service';
+import { FormatterUtil } from '../../shared/utils';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
-import { UserDeleteDialog } from './user-delete-dialog';
-import { UserFormDialog } from './user-form-dialog';
+import { TenantDeleteDialog } from './tenant-delete-dialog';
+import { TenantFormDialog } from './tenant-form-dialog';
 
 @Component({
-  selector: 'app-users',
+  selector: 'app-tenants',
   imports: [
     DatePipe,
     MatButtonModule,
@@ -47,40 +41,40 @@ import { UserFormDialog } from './user-form-dialog';
     MatTooltipModule,
     PageHeaderComponent,
   ],
-  templateUrl: './users.component.html',
-  styleUrl: './users.component.scss',
+  templateUrl: './tenants.component.html',
+  styleUrl: './tenants.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UsersComponent {
-  protected readonly columns = ['name', 'email', 'role', 'status', 'createdAt', 'updatedAt', 'actions'];
-  protected readonly roles = USER_ROLES;
-  protected readonly statusFilters = USER_STATUS_FILTERS;
+export class TenantsComponent {
+  protected readonly columns = ['name', 'cnpj', 'email', 'status', 'createdAt', 'updatedAt', 'actions'];
+  protected readonly statusFilters = ENTITY_STATUS_FILTERS;
 
-  private readonly userService = inject(UserService);
+  protected formatCnpj(cnpj: string | null | undefined): string {
+    return FormatterUtil.formatarCnpj(cnpj);
+  }
+
+  private readonly tenantService = inject(TenantService);
   private readonly dialog = inject(MatDialog);
   private readonly toast = inject(ToastService);
 
   protected readonly searchName = signal('');
-  protected readonly searchRole = signal<UserRole | ''>('');
-  protected readonly searchStatus = signal<UserStatusFilter>('All');
+  protected readonly searchStatus = signal<EntityStatusFilter>('All');
 
-  protected readonly filters = signal<UserListQuery>({
+  protected readonly filters = signal<TenantListQuery>({
     pageNumber: 1,
     pageSize: 10,
-    firstName: '',
-    lastName: '',
-    role: '',
+    name: '',
     status: 'All',
   });
 
-  protected readonly results = resource<PagedResult<User> | null, UserListQuery>({
+  protected readonly results = resource<PagedResult<Tenant> | null, TenantListQuery>({
     params: () => this.filters(),
     loader: ({ params }) =>
       firstValueFrom(
-        this.userService.getPage(params).pipe(
+        this.tenantService.getPage(params).pipe(
           catchError((error: unknown) => {
             if (!isUnauthorizedError(error)) {
-              this.toast.error(resolveApiErrorMessage(error, 'Unable to load users.'));
+              this.toast.error(resolveApiErrorMessage(error, 'Unable to load tenants.'));
             }
             return of(null);
           })
@@ -88,35 +82,22 @@ export class UsersComponent {
       ),
   });
 
-  protected fullName(user: User): string {
-    return `${user.firstName} ${user.lastName}`.trim();
-  }
-
-  protected getStatusLabel(status: UserStatus): string {
-    return status;
-  }
-
   protected applyFilters(): void {
     this.filters.update((current) => ({
       ...current,
       pageNumber: 1,
-      firstName: this.searchName(),
-      lastName: '',
-      role: this.searchRole(),
+      name: this.searchName(),
       status: this.searchStatus(),
     }));
   }
 
   protected resetFilters(): void {
     this.searchName.set('');
-    this.searchRole.set('');
     this.searchStatus.set('All');
     this.filters.update((current) => ({
       ...current,
       pageNumber: 1,
-      firstName: '',
-      lastName: '',
-      role: '',
+      name: '',
       status: 'All',
     }));
   }
@@ -129,9 +110,9 @@ export class UsersComponent {
     }));
   }
 
-  protected async createUser(): Promise<void> {
-    const dialogRef = this.dialog.open(UserFormDialog, {
-      data: { user: null },
+  protected async createTenant(): Promise<void> {
+    const dialogRef = this.dialog.open(TenantFormDialog, {
+      data: { tenant: null },
       width: '520px',
       disableClose: true,
     });
@@ -139,13 +120,13 @@ export class UsersComponent {
 
     if (created === true) {
       this.results.reload();
-      this.toast.success('User created successfully.');
+      this.toast.success('Tenant created successfully.');
     }
   }
 
-  protected async editUser(user: User): Promise<void> {
-    const dialogRef = this.dialog.open(UserFormDialog, {
-      data: { user },
+  protected async editTenant(tenant: Tenant): Promise<void> {
+    const dialogRef = this.dialog.open(TenantFormDialog, {
+      data: { tenant },
       width: '520px',
       disableClose: true,
     });
@@ -153,13 +134,13 @@ export class UsersComponent {
 
     if (updated === true) {
       this.results.reload();
-      this.toast.success('User updated successfully.');
+      this.toast.success('Tenant updated successfully.');
     }
   }
 
-  protected async deleteUser(user: User): Promise<void> {
-    const dialogRef = this.dialog.open(UserDeleteDialog, {
-      data: { user },
+  protected async deleteTenant(tenant: Tenant): Promise<void> {
+    const dialogRef = this.dialog.open(TenantDeleteDialog, {
+      data: { tenant },
       width: '440px',
       disableClose: true,
     });
@@ -167,7 +148,7 @@ export class UsersComponent {
 
     if (deleted === true) {
       this.results.reload();
-      this.toast.success('User deleted successfully.');
+      this.toast.success('Tenant deleted successfully.');
     }
   }
 }

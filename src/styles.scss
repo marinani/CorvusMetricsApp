@@ -85,3 +85,15 @@ body {
 *::-webkit-scrollbar-track {
   background: transparent;
 }
+
+.mat-mdc-snack-bar-container.corvus-toast {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  min-width: 0;
+
+  .mat-mdc-snackbar-surface {
+    background: transparent;
+    box-shadow: none;
+  }
+}

@@ -60,7 +60,7 @@ const SAMPLE_COMPANIES: Company[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompaniesComponent {
-  protected readonly columns = ['name', 'industry', 'cnpj', 'active', 'createdAt'];
+  protected readonly columns = ['name', 'industry', 'cnpj', 'active', 'createdAt', 'updatedAt'];
 
   private readonly companyService = inject(CompanyService);
 

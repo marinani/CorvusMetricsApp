@@ -24,3 +24,7 @@ export function resolveApiErrorMessage(error: unknown, fallback: string): string
 
   return fallback;
 }
+
+export function isUnauthorizedError(error: unknown): boolean {
+  return error instanceof HttpErrorResponse && error.status === 401;
+}

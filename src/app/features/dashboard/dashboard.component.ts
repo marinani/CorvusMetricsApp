@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 
 import { KpiCard } from '../../models/kpi.model';
 import { MetricPoint } from '../../models/metric.model';
@@ -29,9 +31,38 @@ const SALES_HISTORY: MetricPoint[] = [
   { label: 'Dec', value: 286 },
 ];
 
+const CHANNEL_HISTORY: MetricPoint[] = [
+  { label: 'Jan', value: 45 },
+  { label: 'Feb', value: 52 },
+  { label: 'Mar', value: 48 },
+  { label: 'Apr', value: 61 },
+  { label: 'May', value: 73 },
+  { label: 'Jun', value: 68 },
+  { label: 'Jul', value: 82 },
+  { label: 'Aug', value: 91 },
+  { label: 'Sep', value: 87 },
+  { label: 'Oct', value: 98 },
+  { label: 'Nov', value: 105 },
+  { label: 'Dec', value: 112 },
+];
+
+interface QuickStat {
+  label: string;
+  value: string;
+  icon: string;
+  color: string;
+}
+
 @Component({
   selector: 'app-dashboard',
-  imports: [MatCardModule, PageHeaderComponent, MetricCardComponent, TrendChartComponent],
+  imports: [
+    MatCardModule,
+    MatChipsModule,
+    MatIconModule,
+    PageHeaderComponent,
+    MetricCardComponent,
+    TrendChartComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,4 +70,12 @@ const SALES_HISTORY: MetricPoint[] = [
 export class DashboardComponent {
   protected readonly kpis = signal<KpiCard[]>(SAMPLE_KPIS);
   protected readonly salesHistory = signal<MetricPoint[]>(SALES_HISTORY);
+  protected readonly channelHistory = signal<MetricPoint[]>(CHANNEL_HISTORY);
+
+  protected readonly quickStats: QuickStat[] = [
+    { label: 'Active Tenants', value: '24', icon: 'apartment', color: '#00e5ff' },
+    { label: 'Total Users', value: '156', icon: 'group', color: '#00e676' },
+    { label: 'Channels', value: '8', icon: 'storefront', color: '#fbbf24' },
+    { label: 'Conversion', value: '4.6%', icon: 'percent', color: '#f87171' },
+  ];
 }

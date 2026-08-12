@@ -3,6 +3,20 @@
   subtitle="Business metrics overview for your companies"
 />
 
+<section class="quick-stats">
+  @for (stat of quickStats; track stat.label) {
+    <mat-card class="quick-stat-card">
+      <div class="stat-icon" [style.background]="stat.color">
+        <mat-icon fontSet="material-icons-outlined">{{ stat.icon }}</mat-icon>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ stat.value }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+    </mat-card>
+  }
+</section>
+
 <section class="kpi-grid">
   @for (kpi of kpis(); track kpi.id) {
     <app-metric-card
@@ -29,11 +43,21 @@
 
   <mat-card class="corvus-panel">
     <header class="panel-header">
-      <h2 class="panel-title">Quarterly Growth</h2>
+      <h2 class="panel-title">Acquisition Channels</h2>
+      <span class="panel-badge">Last 12 months</span>
+    </header>
+    <div class="chart-container">
+      <app-trend-chart [data]="channelHistory()" color="#00e676" />
+    </div>
+  </mat-card>
+
+  <mat-card class="corvus-panel">
+    <header class="panel-header">
+      <h2 class="panel-title">Revenue by Quarter</h2>
       <span class="panel-badge">Year over year</span>
     </header>
     <div class="chart-container">
-      <app-trend-chart [data]="salesHistory()" color="#00e676" />
+      <app-trend-chart [data]="salesHistory()" color="#fbbf24" />
     </div>
   </mat-card>
 </section>

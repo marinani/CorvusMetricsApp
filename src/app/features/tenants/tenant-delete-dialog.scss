@@ -1,0 +1,30 @@
+mat-dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .title-icon {
+    color: var(--corvus-metric-down);
+  }
+}
+
+mat-dialog-content {
+  p {
+    margin: 0 0 8px;
+  }
+}
+
+.delete-warning {
+  color: var(--corvus-text-muted);
+  font-size: 0.85rem;
+}
+
+.form-error {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--corvus-metric-down);
+  background-color: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  font-size: 0.85rem;
+}

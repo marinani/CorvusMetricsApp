@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>
+  <mat-icon fontSet="material-icons-outlined" class="title-icon">palette</mat-icon>
+  Select color
+</h2>
+
+<mat-dialog-content>
+  <div class="preview-row">
+    <span class="preview-swatch" [style.background-color]="selectedColor()"></span>
+    <code>{{ selectedColor().toUpperCase() }}</code>
+  </div>
+
+  <div class="native-field">
+    <input
+      type="color"
+      [value]="selectedColor()"
+      (input)="onNativeInput($event)"
+      aria-label="Pick a custom color"
+    />
+    <span class="native-hint">Custom color</span>
+  </div>
+
+  <div class="palette">
+    @for (hex of palette; track hex) {
+      <button
+        type="button"
+        class="swatch-btn"
+        [style.background-color]="hex"
+        [class.swatch-btn--selected]="selectedColor().toLowerCase() === hex.toLowerCase()"
+        [attr.aria-label]="'Select color ' + hex"
+        (click)="selectPreset(hex)"
+      ></button>
+    }
+  </div>
+
+  <mat-form-field appearance="outline" class="hex-field">
+    <mat-label>Hex value</mat-label>
+    <input matInput [value]="hexText()" (input)="onHexInput($event)" spellcheck="false" />
+    @if (!isHexValid()) {
+      <mat-error>Enter a valid hex color (e.g. #00E5FF)</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="primary" type="button" [disabled]="!isHexValid()" (click)="confirm()">
+    Select
+  </button>
+</mat-dialog-actions>

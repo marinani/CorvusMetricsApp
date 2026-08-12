@@ -32,7 +32,7 @@
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content class="app-content">
+<mat-sidenav-content class="app-content">
     <mat-toolbar class="app-toolbar">
       <button
         mat-icon-button
@@ -49,14 +49,16 @@
 
       <span class="toolbar-spacer"></span>
 
-      <span class="toolbar-user">
-        @if (displayName()) {
-          <span class="toolbar-user-name">{{ displayName() }}</span>
-        }
-        <button mat-icon-button aria-label="User menu" matTooltip="Sign out" (click)="logout()">
-          <mat-icon fontSet="material-icons-outlined">logout</mat-icon>
-        </button>
-      </span>
+      @if (displayName()) {
+        <div class="toolbar-user">
+          <button mat-icon-button class="user-avatar" matTooltip="{{ displayName() }}" aria-label="User menu">
+            <span class="avatar-text">{{ displayName().charAt(0).toUpperCase() }}</span>
+          </button>
+          <button mat-icon-button class="logout-btn" aria-label="Sign out" matTooltip="Sign out" (click)="logout()">
+            <mat-icon fontSet="material-icons-outlined">logout</mat-icon>
+          </button>
+        </div>
+      }
     </mat-toolbar>
 
     <main class="page-content">

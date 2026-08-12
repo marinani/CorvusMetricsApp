@@ -35,7 +35,8 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: 'Basic Registration',
     items: [
-      { path: 'companies', label: 'Companies', icon: 'business' },
+      { path: 'tenants', label: 'Tenants', icon: 'business' },
+      { path: 'acquisition-channels', label: 'Acquisition Channels', icon: 'storefront' },
       { path: 'users', label: 'Users', icon: 'group' },
     ],
   },
@@ -74,8 +75,7 @@ export class MainLayoutComponent {
       return '';
     }
 
-    const fullName = `${currentUser.firstName} ${currentUser.lastName}`.trim();
-    return fullName || currentUser.email;
+    return currentUser.firstName || currentUser.email;
   });
 
   protected readonly isMobile = toSignal(

@@ -1,6 +1,6 @@
-<app-page-header title="Users" subtitle="Create, edit and manage the users of the platform" />
+<app-page-header title="Tenants" subtitle="Create, edit and manage the tenants of the platform" />
 
-<div class="users-toolbar">
+<div class="tenants-toolbar">
   <form class="filter-bar" (submit)="applyFilters(); $event.preventDefault()" novalidate>
     <mat-form-field appearance="outline" class="filter-name">
       <mat-label>Name</mat-label>
@@ -8,19 +8,9 @@
         matInput
         [value]="searchName()"
         (input)="searchName.set($any($event.target).value)"
-        placeholder="Search by first or last name"
+        placeholder="Search by name"
       />
       <mat-icon matPrefix fontSet="material-icons-outlined">search</mat-icon>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Role</mat-label>
-      <mat-select [value]="searchRole()" (selectionChange)="searchRole.set($event.value)">
-        <mat-option value="">All roles</mat-option>
-        @for (role of roles; track role) {
-          <mat-option [value]="role">{{ role }}</mat-option>
-        }
-      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -39,9 +29,9 @@
   </form>
 
   <div class="toolbar-actions">
-    <button mat-flat-button color="primary" type="button" (click)="createUser()">
-      <mat-icon fontSet="material-icons-outlined">person_add</mat-icon>
-      New User
+    <button mat-flat-button color="primary" type="button" (click)="createTenant()">
+      <mat-icon fontSet="material-icons-outlined">add</mat-icon>
+      New Tenant
     </button>
   </div>
 </div>
@@ -52,74 +42,72 @@
       <mat-spinner diameter="36" />
     </div>
   } @else {
-    @let users = results.value()?.items ?? [];
+    @let tenants = results.value()?.items ?? [];
 
-    @if (users.length === 0) {
+    @if (tenants.length === 0) {
       <div class="empty-state">
-        <mat-icon fontSet="material-icons-outlined">group_off</mat-icon>
-        <p>No users found.</p>
+        <mat-icon fontSet="material-icons-outlined">apartment</mat-icon>
+        <p>No tenants found.</p>
       </div>
     } @else {
       <div class="table-container">
-        <table mat-table [dataSource]="users" class="corvus-table">
+        <table mat-table [dataSource]="tenants" class="corvus-table">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let user">{{ fullName(user) }}</td>
+            <td mat-cell *matCellDef="let tenant">{{ tenant.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="cnpj">
+            <th mat-header-cell *matHeaderCellDef>CNPJ</th>
+            <td mat-cell *matCellDef="let tenant">{{ formatCnpj(tenant.cnpj) }}</td>
           </ng-container>
 
           <ng-container matColumnDef="email">
             <th mat-header-cell *matHeaderCellDef>Email</th>
-            <td mat-cell *matCellDef="let user">{{ user.email }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="role">
-            <th mat-header-cell *matHeaderCellDef>Role</th>
-            <td mat-cell *matCellDef="let user">
-              <span class="role-chip">{{ user.role }}</span>
-            </td>
+            <td mat-cell *matCellDef="let tenant">{{ tenant.email }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let user">
+            <td mat-cell *matCellDef="let tenant">
               <span
                 class="status-chip"
-                [class.status-chip--active]="user.status === 'Active'"
-                [class.status-chip--inactive]="user.status === 'Inactive'"
+                [class.status-chip--active]="tenant.status === 'Active'"
+                [class.status-chip--inactive]="tenant.status === 'Inactive'"
               >
-                {{ getStatusLabel(user.status) }}
+                {{ tenant.status }}
               </span>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="createdAt">
             <th mat-header-cell *matHeaderCellDef>Created</th>
-            <td mat-cell *matCellDef="let user">{{ user.createdAt | date: 'MMM d, y' }}</td>
+            <td mat-cell *matCellDef="let tenant">{{ tenant.createdAt | date: 'MMM d, y' }}</td>
           </ng-container>
 
           <ng-container matColumnDef="updatedAt">
             <th mat-header-cell *matHeaderCellDef>Modified</th>
-            <td mat-cell *matCellDef="let user">{{ user.updatedAt ? (user.updatedAt | date: 'MMM d, y') : '—' }}</td>
+            <td mat-cell *matCellDef="let tenant">{{ tenant.updatedAt ? (tenant.updatedAt | date: 'MMM d, y') : '—' }}</td>
           </ng-container>
 
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
-            <td mat-cell *matCellDef="let user" class="actions-cell">
+            <td mat-cell *matCellDef="let tenant" class="actions-cell">
               <button
                 mat-icon-button
                 type="button"
-                aria-label="Edit user"
+                aria-label="Edit tenant"
                 matTooltip="Edit"
-                (click)="editUser(user)"
+                (click)="editTenant(tenant)"
               >
                 <mat-icon fontSet="material-icons-outlined">edit</mat-icon>
               </button>
               <button
                 mat-icon-button
                 type="button"
-                aria-label="Delete user"
+                aria-label="Delete tenant"
                 matTooltip="Delete"
-                (click)="deleteUser(user)"
+                (click)="deleteTenant(tenant)"
               >
                 <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
               </button>
@@ -138,7 +126,7 @@
         [pageSizeOptions]="[5, 10, 25, 50]"
         (page)="onPageChange($event)"
         showFirstLastButtons
-        aria-label="Users pagination"
+        aria-label="Tenants pagination"
       ></mat-paginator>
     }
   }

@@ -1,0 +1,75 @@
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  > * {
+    min-width: 0;
+  }
+}
+
+.color-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .color-label {
+    color: var(--corvus-text-muted);
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+
+  .color-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 56px;
+    padding: 0 14px;
+    border-radius: 4px;
+    border: 1px solid var(--corvus-border);
+    background-color: transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      border-color: var(--corvus-primary);
+    }
+  }
+
+  .color-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .color-value {
+    flex: 1;
+    color: var(--corvus-text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .color-icon {
+    color: var(--corvus-text-muted);
+  }
+}
+
+.field-error {
+  color: var(--corvus-metric-down);
+  font-size: 0.78rem;
+}
+
+.form-error {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--corvus-metric-down);
+  background-color: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  font-size: 0.85rem;
+}
