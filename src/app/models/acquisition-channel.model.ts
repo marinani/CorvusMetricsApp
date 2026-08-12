@@ -5,8 +5,8 @@ export interface AcquisitionChannel {
   name: string;
   color: string;
   isActive: boolean;
-  createdAt: string;
-  updatedAt?: string;
+  createdAtUtc: Date;
+  updatedAtUtc?: Date;
 }
 
 export interface CreateAcquisitionChannelRequest {

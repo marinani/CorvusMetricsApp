@@ -15,8 +15,8 @@ export interface User {
   email: string;
   role: UserRole;
   status: UserStatus;
-  createdAt: string;
-  updatedAt?: string;
+  createdAtUtc: Date;
+  updatedAtUtc?: Date;
 }
 
 export interface CreateUserRequest {

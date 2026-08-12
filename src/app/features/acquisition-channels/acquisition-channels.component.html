@@ -80,12 +80,12 @@
 
           <ng-container matColumnDef="createdAt">
             <th mat-header-cell *matHeaderCellDef>Created</th>
-            <td mat-cell *matCellDef="let channel">{{ channel.createdAt | date: 'MMM d, y' }}</td>
+            <td mat-cell *matCellDef="let channel">{{ channel.createdAtUtc | date: 'MMM d, y hh:mm a' }}</td>
           </ng-container>
 
           <ng-container matColumnDef="updatedAt">
             <th mat-header-cell *matHeaderCellDef>Modified</th>
-            <td mat-cell *matCellDef="let channel">{{ channel.updatedAt ? (channel.updatedAt | date: 'MMM d, y') : '—' }}</td>
+            <td mat-cell *matCellDef="let channel">{{ channel.updatedAtUtc ? (channel.updatedAtUtc | date: 'MMM d, y hh:mm a') : '—' }}</td>
           </ng-container>
 
           <ng-container matColumnDef="actions">
