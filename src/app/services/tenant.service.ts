@@ -44,4 +44,8 @@ export class TenantService {
   remove(id: string): Observable<void> {
     return this.api.delete<void>(`/tenants/${id}`);
   }
+
+  getActiveTenants(): Observable<Tenant[]> {
+    return this.api.get<Tenant[]>('/tenants/active');
+  }
 }

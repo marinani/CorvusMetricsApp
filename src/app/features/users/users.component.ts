@@ -52,7 +52,7 @@ import { UserFormDialog } from './user-form-dialog';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersComponent {
-  protected readonly columns = ['name', 'email', 'role', 'status', 'createdAt', 'updatedAt', 'actions'];
+  protected readonly columns = ['name', 'email', 'role', 'tenantStr', 'status', 'createdAt', 'updatedAt', 'actions'];
   protected readonly roles = USER_ROLES;
   protected readonly statusFilters = USER_STATUS_FILTERS;
 

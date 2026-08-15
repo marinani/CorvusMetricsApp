@@ -14,9 +14,11 @@ export interface User {
   lastName: string;
   email: string;
   role: UserRole;
-  status: UserStatus;
+  isActive: boolean;
+  tenantIds?: string[];
   createdAtUtc: Date;
   updatedAtUtc?: Date;
+  tenantStr: string;
 }
 
 export interface CreateUserRequest {
@@ -25,6 +27,7 @@ export interface CreateUserRequest {
   email: string;
   password: string;
   role: UserRole;
+  tenantIds?:string[];
 }
 
 export interface UpdateUserRequest {
@@ -32,6 +35,7 @@ export interface UpdateUserRequest {
   firstName: string;
   lastName: string;
   role: UserRole;
+  tenantIds?: string[];
 }
 
 export interface UserListQuery {

@@ -29,7 +29,7 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Role</mat-label>
-        <mat-select [formField]="userForm.role">
+        <mat-select [formField]="userForm.role" (selectionChange)="onRoleChange($event.value)">
           <mat-option value="">Select a role</mat-option>
           @for (role of roles; track role) {
             <mat-option [value]="role">{{ role }}</mat-option>
@@ -39,6 +39,48 @@
           <mat-error>{{ userForm.role().errors()[0].message }}</mat-error>
         }
       </mat-form-field>
+
+      @if (isSeller()) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tenant</mat-label>
+          <mat-select [formField]="userForm.tenantId">
+            @if (tenantsLoading()) {
+              <mat-option disabled>Loading tenants...</mat-option>
+            } @else if (activeTenants().length === 0) {
+              <mat-option value="">No active tenants found</mat-option>
+            } @else {
+              <mat-option value="">Select a tenant</mat-option>
+              @for (tenant of activeTenants(); track tenant.id) {
+                <mat-option [value]="tenant.id">{{ tenant.name }}</mat-option>
+              }
+            }
+          </mat-select>
+          @if (userForm.tenantId().touched() && userForm.tenantId().errors().length) {
+            <mat-error>{{ userForm.tenantId().errors()[0].message }}</mat-error>
+          }
+        </mat-form-field>
+      }
+
+      @if (isManager()) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tenants</mat-label>
+          <mat-select
+            [value]="selectedTenantIds()"
+            multiple
+            (selectionChange)="selectedTenantIds.set($event.value ?? [])"
+          >
+            @if (tenantsLoading()) {
+              <mat-option disabled>Loading tenants...</mat-option>
+            } @else if (activeTenants().length === 0) {
+              <mat-option disabled>No active tenants found</mat-option>
+            } @else {
+              @for (tenant of activeTenants(); track tenant.id) {
+                <mat-option [value]="tenant.id">{{ tenant.name }}</mat-option>
+              }
+            }
+          </mat-select>
+        </mat-form-field>
+      }
 
       @if (!isEditing) {
         <mat-form-field appearance="outline" class="full-width">

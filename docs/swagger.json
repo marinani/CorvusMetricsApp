@@ -454,6 +454,18 @@
         }
       }
     },
+    "/api/tenants/active": {
+      "get": {
+        "tags": [
+          "Tenants"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/tenants/{id}": {
       "get": {
         "tags": [
@@ -907,6 +919,14 @@
           },
           "role": {
             "$ref": "#/components/schemas/UserRole"
+          },
+          "tenantIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1039,6 +1059,14 @@
           },
           "role": {
             "$ref": "#/components/schemas/UserRole"
+          },
+          "tenantIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

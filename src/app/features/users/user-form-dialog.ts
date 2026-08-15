@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import {
   FormField,
   disabled,
   email,
   form,
+  hidden,
   maxLength,
   minLength,
   required,
@@ -20,6 +21,8 @@ import { firstValueFrom } from 'rxjs';
 
 import { resolveApiErrorMessage } from '../../core/utils/http-error.util';
 import { USER_ROLES, User, UserRole } from '../../models/user.model';
+import { Tenant } from '../../models/tenant.model';
+import { TenantService } from '../../services/tenant.service';
 import { UserService } from '../../services/user.service';
 
 export interface UserFormData {
@@ -32,6 +35,7 @@ export interface UserFormModel {
   email: string;
   password: string;
   role: UserRole | '';
+  tenantId: string;
 }
 
 @Component({
@@ -54,6 +58,7 @@ export class UserFormDialog {
   private readonly dialogRef = inject(MatDialogRef<UserFormDialog>);
   private readonly data = inject<UserFormData>(MAT_DIALOG_DATA);
   private readonly userService = inject(UserService);
+  private readonly tenantService = inject(TenantService);
 
   protected readonly isEditing = this.data.user !== null;
   protected readonly roles = USER_ROLES;
@@ -61,12 +66,20 @@ export class UserFormDialog {
   protected readonly errorMessage = signal('');
   protected readonly hidePassword = signal(true);
 
+  protected readonly activeTenants = signal<Tenant[]>([]);
+  protected readonly tenantsLoading = signal(false);
+  protected readonly selectedTenantIds = signal<string[]>(this.data.user?.tenantIds ?? []);
+
+  protected readonly isSeller = computed(() => this.model().role === 'Seller');
+  protected readonly isManager = computed(() => this.model().role === 'Manager');
+
   private readonly model = signal<UserFormModel>({
     firstName: this.data.user?.firstName ?? '',
     lastName: this.data.user?.lastName ?? '',
     email: this.data.user?.email ?? '',
     password: '',
     role: this.data.user?.role ?? '',
+    tenantId: this.data.user?.tenantIds?.[0] ?? '',
   });
 
   protected readonly userForm = form(this.model, (schemaPath) => {
@@ -87,10 +100,45 @@ export class UserFormDialog {
     }
 
     required(schemaPath.role, { message: 'Role is required' });
+
+    hidden(schemaPath.tenantId, () => this.model().role !== 'Seller');
+    required(schemaPath.tenantId, { message: 'Select a tenant' });
   });
+
+  constructor() {
+    if (this.isSeller() || this.isManager()) {
+      void this.loadActiveTenants();
+    }
+  }
 
   protected togglePasswordVisibility(): void {
     this.hidePassword.update((hidden) => !hidden);
+  }
+
+  protected onRoleChange(role: UserRole | ''): void {
+    if (role === 'Seller' || role === 'Manager') {
+      void this.loadActiveTenants();
+    } else {
+      this.model.update((current) => ({ ...current, tenantId: '' }));
+      this.selectedTenantIds.set([]);
+    }
+  }
+
+  private async loadActiveTenants(): Promise<void> {
+    if (this.activeTenants().length > 0) {
+      return;
+    }
+
+    this.tenantsLoading.set(true);
+
+    try {
+      const tenants = await firstValueFrom(this.tenantService.getActiveTenants());
+      this.activeTenants.set(tenants ?? []);
+    } catch (error) {
+      this.errorMessage.set(resolveApiErrorMessage(error, 'Unable to load tenants.'));
+    } finally {
+      this.tenantsLoading.set(false);
+    }
   }
 
   protected onSubmit(): void {
@@ -99,6 +147,13 @@ export class UserFormDialog {
       this.errorMessage.set('');
 
       const value = this.model();
+      const role = value.role as UserRole;
+      let tenantIds: string[] | undefined;
+      if (role === 'Seller') {
+        tenantIds = value.tenantId ? [value.tenantId] : [];
+      } else if (role === 'Manager') {
+        tenantIds = this.selectedTenantIds();
+      }
 
       try {
         if (this.isEditing && this.data.user) {
@@ -107,7 +162,8 @@ export class UserFormDialog {
               id: this.data.user.id,
               firstName: value.firstName,
               lastName: value.lastName,
-              role: value.role as UserRole,
+              role,
+              tenantIds,
             })
           );
         } else {
@@ -117,7 +173,8 @@ export class UserFormDialog {
               lastName: value.lastName,
               email: value.email,
               password: value.password,
-              role: value.role as UserRole,
+              role,
+              tenantIds,
             })
           );
         }
